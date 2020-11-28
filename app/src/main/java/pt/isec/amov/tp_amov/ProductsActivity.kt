@@ -7,8 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_dialog.*
+import kotlinx.android.synthetic.main.activity_dialog.view.*
 import kotlinx.android.synthetic.main.activity_products.*
 import pt.isec.amov.tp_amov.Dados.DadosProduto
 import pt.isec.amov.tp_amov.Dados.Produtos
@@ -35,11 +39,37 @@ class ProductsActivity : AppCompatActivity() {
         //val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos)
         //lv.adapter = adapter
         var intent = Intent(this@ProductsActivity, ProductDetails::class.java)
-        val item = DadosProduto("Miguel", "fruta", 7, "gostoso", 5, intent)
+
+        var dialog = LayoutInflater.from(this).inflate(R.layout.activity_dialog, null)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialog)
+            .setTitle("Product details")
+            .setCancelable(false)
+            .create()
+
+        alertDialog.show()
 
 
-        Produtos.addProduct(item)
+        dialog.submit_buton.setOnClickListener{
+            val name = dialog.name_dialog.text.toString()
+            val qty = dialog.qty_dialog.text.toString()
 
+            if(name.isEmpty() || qty.isEmpty()){
+                Toast.makeText(this, "Preencha os campos de texto todos", Toast.LENGTH_LONG).show()
+            }else if(qty.toInt() <= 0){
+                Toast.makeText(this, "A quantidade tem de ser maior que zero", Toast.LENGTH_LONG).show()
+            }
+            else{
+                var item = DadosProduto(name, "fruta", qty.toInt(), "gostoso", 5, intent)
+                Produtos.addProduct(item)
+                alertDialog.dismiss()
+            }
+        }
+
+        dialog.cancel_button.setOnClickListener{
+            alertDialog.dismiss()
+        }
 
         rvList.adapter = MyRVAdapter(Produtos.data)
 
