@@ -49,7 +49,7 @@ class ProductDetails : AppCompatActivity() {
         id = intent.getIntExtra("ProductId", -1)
         idList = intent.getIntExtra("ListId", -1)
         produtos = DadosLista.getListById(idList)!!
-
+        produtos.intent.replaceExtras(produtos.intent).putExtra("idList", idList)
         if (Build.VERSION.SDK_INT >= 24) {
             try {
                 val m: Method =

@@ -30,13 +30,9 @@ class ProductsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        id = intent.getIntExtra("idList", -1)
-
-        rvList.layoutManager = LinearLayoutManager(
-                this@ProductsActivity,
-                LinearLayoutManager.VERTICAL,
-                false
-        )
+        id = DadosLista.lastList
+        println(id)
+        rvList.layoutManager = LinearLayoutManager(this@ProductsActivity, LinearLayoutManager.VERTICAL, false)
         rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
 
     }

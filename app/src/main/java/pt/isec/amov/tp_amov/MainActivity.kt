@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
             holder.itemView.setOnClickListener{
                 var context = holder.itemView.context
                 data[position].intent.putExtra("idList", data[position].id)
+                DadosLista.lastList = data[position].id
                 context.startActivity(data[position].intent)
             }
             holder.update(data[position].nome)

@@ -5,7 +5,7 @@ import android.content.Intent
 object DadosLista {
     var data = arrayListOf<Produtos>()
     lateinit var intent : Intent
-
+    var lastList : Int = 0
 
     fun setNewIntent(intent : Intent){
         this.intent = intent
