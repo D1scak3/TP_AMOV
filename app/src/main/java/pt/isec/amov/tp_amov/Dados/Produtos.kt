@@ -3,11 +3,24 @@ package pt.isec.amov.tp_amov.Dados
 
 import android.content.Intent
 
-object Produtos {
+class Produtos {
     var data = arrayListOf<DadosProduto>()
     lateinit var nome : String
     lateinit var intent : Intent
+    var id:Int = 0
 
+    constructor(nome: String, intent: Intent) {
+        this.nome = nome
+        this.intent = intent
+        this.id = Produtos.getid()
+    }
+
+    companion object{
+        var i = 0
+        fun getid() : Int{
+            return i++
+        }
+    }
 
 
 

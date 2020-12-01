@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_product_details.*
+import pt.isec.amov.tp_amov.Dados.DadosLista
 import pt.isec.amov.tp_amov.Dados.DadosProduto
 import pt.isec.amov.tp_amov.Dados.Produtos
 import java.io.File
@@ -31,8 +32,8 @@ class ProductDetails : AppCompatActivity() {
     var filePath: String? = null
 
     var id : Int = 0
-
-
+    var idList : Int = 0
+    lateinit var produtos : Produtos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +47,8 @@ class ProductDetails : AppCompatActivity() {
 
         Utils.setImgFromAsset(img_detail, assetImgPath)
         id = intent.getIntExtra("ProductId", -1)
-
-
+        idList = intent.getIntExtra("ListId", -1)
+        produtos = DadosLista.getListById(idList)!!
 
         if (Build.VERSION.SDK_INT >= 24) {
             try {
@@ -60,7 +61,7 @@ class ProductDetails : AppCompatActivity() {
         }
 
 
-        val product : DadosProduto? = Produtos.getProductById(id)
+        val product : DadosProduto? = produtos.getProductById(id)
         if(!product?.getProductImgPath()?.isEmpty()!!) {
             Utils.setPic(img_detail, product.getProductImgPath())
             tv1.setText(product.getProductImgPath())
@@ -72,7 +73,7 @@ class ProductDetails : AppCompatActivity() {
         if (requestCode == 70 && resultCode == Activity.RESULT_OK) {
             Utils.setPic(img_detail, filePath!!)
 
-            Produtos.getProductById(id)?.setProductImgPath(filePath!!)
+            produtos.getProductById(id)?.setProductImgPath(filePath!!)
 
             return
         }
@@ -85,7 +86,7 @@ class ProductDetails : AppCompatActivity() {
             }
             Utils.setPic(img_detail, filePath!!)
 
-            Produtos.getProductById(id)?.setProductImgPath(filePath!!)
+            produtos.getProductById(id)?.setProductImgPath(filePath!!)
 
             if (ContextCompat.checkSelfPermission(this,
                             android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||

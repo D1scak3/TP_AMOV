@@ -13,11 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_dialog.view.*
 import kotlinx.android.synthetic.main.activity_products.*
+import pt.isec.amov.tp_amov.Dados.DadosLista
 import pt.isec.amov.tp_amov.Dados.DadosProduto
 import pt.isec.amov.tp_amov.Dados.Produtos
 
 class ProductsActivity : AppCompatActivity() {
-
+    companion object{
+        var id : Int = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,18 +30,20 @@ class ProductsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        id = intent.getIntExtra("idList", -1)
+
         rvList.layoutManager = LinearLayoutManager(
                 this@ProductsActivity,
                 LinearLayoutManager.VERTICAL,
                 false
         )
-        rvList.adapter = MyRVAdapter(Produtos.data)
+        rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
 
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        rvList.adapter = MyRVAdapter(Produtos.data)
+        rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
     }
 
 
@@ -46,8 +51,8 @@ class ProductsActivity : AppCompatActivity() {
 
 
     fun onDelete(view: View){
-        Produtos.removeSelectedProducts()
-        rvList.adapter = MyRVAdapter(Produtos.data)
+        DadosLista.getListById(id)?.removeSelectedProducts()
+        rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
     }
 
 
@@ -84,9 +89,9 @@ class ProductsActivity : AppCompatActivity() {
                 var item = DadosProduto("b", "fruta", qty.toDouble(), "gostoso", 5, intent)
                 var item2 = DadosProduto("a", "fruta", qty.toDouble(), "gostoso", 5, intent2)
                 var item3 = DadosProduto("c", "fruta", qty.toDouble(), "gostoso", 5, intent3)
-                Produtos.addProduct(item)
-                Produtos.addProduct(item2)
-                Produtos.addProduct(item3)
+                DadosLista.getListById(id)?.addProduct(item)
+                DadosLista.getListById(id)?.addProduct(item2)
+                DadosLista.getListById(id)?.addProduct(item3)
                 alertDialog.dismiss()
             }
 
@@ -97,7 +102,7 @@ class ProductsActivity : AppCompatActivity() {
             alertDialog.dismiss()
         }
 
-        rvList.adapter = MyRVAdapter(Produtos.data)
+        rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
 
     }
 
@@ -142,6 +147,7 @@ class ProductsActivity : AppCompatActivity() {
                 }else {
                     var context = holder.itemView.context
                     data[position].intent.putExtra("ProductId", data[position].id)
+                    data[position].intent.putExtra("ListId", id)
                     context.startActivity(data[position].intent)
                 }
 
@@ -149,8 +155,8 @@ class ProductsActivity : AppCompatActivity() {
 
             holder.itemView.setOnLongClickListener { it ->
 
-                if(!Produtos.getDelete()){
-                    Produtos.setDelete(true)
+                if(!DadosLista.getListById(id)?.getDelete()!!){
+                    DadosLista.getListById(id)?.setDelete(true)
                 }
 
                 var tv : TextView = it.findViewById(R.id.name)
@@ -177,8 +183,8 @@ class ProductsActivity : AppCompatActivity() {
 
         searchViewEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                var s = Produtos.search(query)
-                if (s.isNotEmpty())
+                var s = DadosLista.getListById(id)?.search(query)
+                if (s?.isNotEmpty()!!)
                     rvList.adapter = MyRVAdapter(s)
                 else{
                     Toast.makeText(this@ProductsActivity, "That product doesnt exists", Toast.LENGTH_LONG).show()
@@ -187,7 +193,7 @@ class ProductsActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                rvList.adapter = MyRVAdapter(Produtos.data)
+                rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
                 return false
             }
         })
@@ -198,8 +204,8 @@ class ProductsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.sort_name) {
-            Produtos.sortByName()
-            rvList.adapter = MyRVAdapter(Produtos.data)
+            DadosLista.getListById(id)?.sortByName()
+            rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
             return true
         }
         return super.onOptionsItemSelected(item)

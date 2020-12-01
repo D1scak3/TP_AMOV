@@ -5,14 +5,10 @@ import android.content.Intent
 object DadosLista {
     var data = arrayListOf<Produtos>()
     lateinit var intent : Intent
-    lateinit var nome : String
+
 
     fun setNewIntent(intent : Intent){
         this.intent = intent
-    }
-
-    fun setListListName(str : String){
-        nome = str
     }
 
     fun addList(lista : Produtos){
@@ -21,6 +17,14 @@ object DadosLista {
 
     fun removeList(lista : Produtos) : Boolean{
         return data.remove(lista)
+    }
+
+    fun getListById(id:Int) : Produtos? {
+        for (l in data){
+            if(l.id == id)
+                return l
+        }
+        return null
     }
 
 }

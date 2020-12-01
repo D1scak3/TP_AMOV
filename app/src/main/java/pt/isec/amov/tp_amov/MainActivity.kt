@@ -23,10 +23,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         rvListList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-
+        rvListList.adapter = MyRVAdapter(DadosLista.data)
 
     }
 
@@ -50,9 +48,8 @@ class MainActivity : AppCompatActivity() {
             if(nome.isEmpty())
                 Toast.makeText(this, "Introduza o nome para a lista.", Toast.LENGTH_LONG).show()
             else{
-                var item = Produtos//lista
-                item.intent = intent
-                item.nome = nome
+                var item = Produtos(nome, intent)//lista
+
                 DadosLista.addList(item)//adiciona lista à lista de listas
                 alertDialog.dismiss()
             }
@@ -86,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             holder.itemView.setOnClickListener{
                 var context = holder.itemView.context
-                data[position].intent.putExtra("teste", data[position].nome)
+                data[position].intent.putExtra("idList", data[position].id)
                 context.startActivity(data[position].intent)
             }
             holder.update(data[position].nome)
