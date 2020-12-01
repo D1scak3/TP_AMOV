@@ -3,7 +3,7 @@ package pt.isec.amov.tp_amov.Dados
 import android.content.Intent
 
 object DadosLista {
-    var data = arrayListOf(Produtos)
+    var data = arrayListOf<Produtos>()
     lateinit var intent : Intent
     lateinit var nome : String
 
