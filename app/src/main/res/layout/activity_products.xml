@@ -10,11 +10,18 @@
     android:id="@+id/masterParent"
     >
 
+
+
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         >
+
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:padding="4dp"
@@ -30,25 +37,48 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+
+        android:id="@+id/btnlayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_gravity="bottom"
-        android:gravity="right"
+
         android:padding="5dp"
         >
 
         <Button
+
+
+            android:id="@+id/delete_btn"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:text="Delete"
+            android:textSize="16dp"
+            android:background="@drawable/delete_button"
+            android:visibility="invisible"
+            android:onClick="onDelete"
+            />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+        <Button
+
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:text="+"
             android:textSize="35dp"
+
             android:textAlignment="center"
+
             android:background="@drawable/plus_button"
             android:onClick="onPlus"
             />
-
-
 
     </LinearLayout>
 
