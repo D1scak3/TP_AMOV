@@ -1,18 +1,16 @@
 package pt.isec.amov.tp_amov
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.*
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_dialog.view.*
 import kotlinx.android.synthetic.main.activity_products.*
 import pt.isec.amov.tp_amov.Dados.DadosProduto
@@ -29,13 +27,14 @@ class ProductsActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        rvList.layoutManager = LinearLayoutManager(this@ProductsActivity,LinearLayoutManager.VERTICAL,false)
-
+        rvList.layoutManager = LinearLayoutManager(
+                this@ProductsActivity,
+                LinearLayoutManager.VERTICAL,
+                false
+        )
+        rvList.adapter = MyRVAdapter(Produtos.data)
 
     }
-
-
-
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -53,7 +52,6 @@ class ProductsActivity : AppCompatActivity() {
 
 
     fun onPlus(view: View){
-
         //produtos.add("teste")
 
         //val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, produtos)
@@ -62,14 +60,13 @@ class ProductsActivity : AppCompatActivity() {
         var intent2 = Intent(this@ProductsActivity, ProductDetails::class.java)
         var intent3 = Intent(this@ProductsActivity, ProductDetails::class.java)
 
-
         var dialog = LayoutInflater.from(this).inflate(R.layout.activity_dialog, null)
 
         val alertDialog = AlertDialog.Builder(this)
-            .setView(dialog)
-            .setTitle("Product details")
-            .setCancelable(false)
-            .create()
+                .setView(dialog)
+                .setTitle("Product details")
+                .setCancelable(false)
+                .create()
 
         alertDialog.show()
 
@@ -94,7 +91,6 @@ class ProductsActivity : AppCompatActivity() {
             }
 
 
-
         }
 
         dialog.cancel_button.setOnClickListener{
@@ -107,19 +103,15 @@ class ProductsActivity : AppCompatActivity() {
 
     class MyRVAdapter(val data: ArrayList<DadosProduto>) : RecyclerView.Adapter<MyRVAdapter.MyViewHolder>() {
 
-
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-
             var tv1 : TextView = view.findViewById(R.id.name)
             var tv2 : TextView = view.findViewById(R.id.name2)
             var tv3 : TextView = view.findViewById(R.id.name3)
-
 
             fun update(str1: String, str2: String, str3: String) {
                 tv1.text = str1
                 tv2.text = str2
                 tv3.text = str3
-
             }
 
 
@@ -128,9 +120,9 @@ class ProductsActivity : AppCompatActivity() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val view = LayoutInflater.from(parent.context).inflate(
-                R.layout.product_list_item,
-                parent,
-                false
+                    R.layout.product_list_item,
+                    parent,
+                    false
             )
 
             return MyViewHolder(view)
@@ -140,7 +132,6 @@ class ProductsActivity : AppCompatActivity() {
 
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-
 
             holder.itemView.setOnClickListener{ it ->
 
@@ -171,12 +162,10 @@ class ProductsActivity : AppCompatActivity() {
             holder.update(data[position].pname, data[position].category, data[position].pname)
 
 
-
         }
 
         override fun getItemCount(): Int = data.size
     }
-
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -215,7 +204,6 @@ class ProductsActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }
 
 
