@@ -16,6 +16,7 @@
 
         <ImageView
             android:id="@+id/img"
+            android:layout_gravity="center"
             android:src="@drawable/img_566093"
             android:adjustViewBounds="true"
             android:layout_width="0dp"

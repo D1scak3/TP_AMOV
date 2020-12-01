@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_product_details.*
+import pt.isec.amov.tp_amov.Dados.DadosProduto
+import pt.isec.amov.tp_amov.Dados.Produtos
 import java.io.File
 import java.io.IOException
 import java.lang.reflect.Method
@@ -27,15 +29,17 @@ private const val assetImgPath = "Images/defaultImg.png"
 class ProductDetails : AppCompatActivity() {
 
     var filePath: String? = null
-
+    var id : Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_details)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         Utils.setImgFromAsset(img_detail, assetImgPath)
-        var teste2 = intent.getIntExtra("teste", 77)
+        id = intent.getIntExtra("ProductId", -1)
 
 
         if (Build.VERSION.SDK_INT >= 24) {
@@ -48,11 +52,18 @@ class ProductDetails : AppCompatActivity() {
             }
         }
 
+
+        val product : DadosProduto? = Produtos.getProductById(id)
+        if(!product?.getProductImgPath()?.isEmpty()!!) {
+            Utils.setPic(img_detail, product.getProductImgPath())
+            tv1.setText(product.getProductImgPath())
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, info: Intent?) {
         if (requestCode == 70 && resultCode == Activity.RESULT_OK) {
             Utils.setPic(img_detail, filePath!!)
+            Produtos.getProductById(id)?.setProductImgPath(filePath!!)
             return
         }
         if(requestCode == 80 && resultCode == Activity.RESULT_OK && info!=null){
@@ -63,7 +74,7 @@ class ProductDetails : AppCompatActivity() {
                     filePath = cursor.getString(0)
             }
             Utils.setPic(img_detail, filePath!!)
-
+            Produtos.getProductById(id)?.setProductImgPath(filePath!!)
             if (ContextCompat.checkSelfPermission(this,
                             android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this,

@@ -2,7 +2,31 @@ package pt.isec.amov.tp_amov.Dados
 
 object Produtos {
     var data = arrayListOf<DadosProduto>()
+    private var showDelete : Boolean = false
+    var searchedData = arrayListOf<DadosProduto>()
 
+    fun getDelete() : Boolean{return showDelete}
+    fun setDelete(bool:Boolean){this.showDelete = bool}
+
+    fun getProductById(id:Int) : DadosProduto? {
+        for (p in data){
+            if(p.id == id)
+                return p
+        }
+        return null
+    }
+
+
+
+
+    fun search(name:String): ArrayList<DadosProduto> {
+        searchedData.clear()
+        for(product in data){
+            if(product.pname.contains(name))
+                searchedData.add(product)
+        }
+        return searchedData
+    }
 
 
     fun addProduct(product : DadosProduto){
@@ -13,20 +37,26 @@ object Produtos {
         return data.remove(product)
     }
 
+    fun removeSelectedProducts(){
+        for(product in data)
+            if(product.selectedToDelete)
+                data.remove(product)
+    }
+
     fun sortByCategory(){
-        data = data.sortedWith(compareBy { it.category }) as ArrayList<DadosProduto>
+        data.sortBy { it.category }
     }
 
     fun sortByQty(){
-        data = data.sortedWith(compareBy { it.qty }) as ArrayList<DadosProduto>
+        data.sortBy { it.qty }
     }
 
     fun sortByName(){
-        data = data.sortedWith(compareBy { it.pname }) as ArrayList<DadosProduto>
+        data.sortBy { it.pname.toUpperCase() }
     }
 
     fun sortByImportance(){
-        data = data.sortedWith(compareBy { it.lvlImportance }) as ArrayList<DadosProduto>
+        data.sortBy { it.lvlImportance }
     }
 
 
