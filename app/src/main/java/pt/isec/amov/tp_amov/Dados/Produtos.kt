@@ -7,6 +7,7 @@ class Produtos {
     var data = arrayListOf<DadosProduto>()
     lateinit var nome : String
     lateinit var intent : Intent
+    var carrinho = arrayListOf<DadosProduto>()
     var id:Int = 0
 
     constructor(nome: String, intent: Intent) {

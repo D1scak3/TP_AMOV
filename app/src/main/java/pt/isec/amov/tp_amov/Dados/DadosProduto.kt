@@ -12,6 +12,8 @@ class DadosProduto {
     var intent:Intent
     var id:Int = 0
     var qty:Double
+    var noCarrinho : Boolean = false
+    var noCarrinhoStr : String = "Add to cart"
     lateinit var imgPath:String
     companion object{
         var i = 0

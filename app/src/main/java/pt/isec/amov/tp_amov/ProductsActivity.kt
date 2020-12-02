@@ -3,6 +3,7 @@ package pt.isec.amov.tp_amov
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
@@ -11,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_carrinho.*
 import kotlinx.android.synthetic.main.activity_dialog.view.*
 import kotlinx.android.synthetic.main.activity_products.*
+import kotlinx.android.synthetic.main.product_list_item.view.*
 import pt.isec.amov.tp_amov.Dados.DadosLista
 import pt.isec.amov.tp_amov.Dados.DadosProduto
 import pt.isec.amov.tp_amov.Dados.Produtos
@@ -20,6 +23,7 @@ import pt.isec.amov.tp_amov.Dados.Produtos
 class ProductsActivity : AppCompatActivity() {
     companion object{
         var id : Int = 0
+        var strBtn = "Add to cart"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,17 +106,21 @@ class ProductsActivity : AppCompatActivity() {
 
     }
 
+
+
     class MyRVAdapter(val data: ArrayList<DadosProduto>) : RecyclerView.Adapter<MyRVAdapter.MyViewHolder>() {
 
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             var tv1 : TextView = view.findViewById(R.id.name)
             var tv2 : TextView = view.findViewById(R.id.name2)
             var tv3 : TextView = view.findViewById(R.id.name3)
+            var btn : Button = view.findViewById(R.id.addToCartBtn)
 
-            fun update(str1: String, str2: String, str3: String) {
+            fun update(str1: String, str2: String, str3: String, btnStr : String) {
                 tv1.text = str1
                 tv2.text = str2
                 tv3.text = str3
+                btn.text = btnStr
             }
 
 
@@ -161,7 +169,24 @@ class ProductsActivity : AppCompatActivity() {
                 return@setOnLongClickListener true
             }
 
-            holder.update(data[position].pname, data[position].category, data[position].pname)
+            holder.itemView.addToCartBtn.setOnClickListener{
+                var product = DadosLista.getListById(DadosLista.lastList)!!.getProductById(data[position].id)
+                if(!product!!.noCarrinho) {
+                    DadosLista.getListById(DadosLista.lastList)!!.carrinho.add(product)
+                    product.noCarrinho = true
+                    holder.itemView.addToCartBtn.setText("Remove from cart")
+                    product.noCarrinhoStr = "Remove from cart"
+
+                }else{
+                    DadosLista.getListById(DadosLista.lastList)!!.carrinho.remove(product)
+                    product.noCarrinho = false
+                    holder.itemView.addToCartBtn.setText("Add to cart")
+                    product.noCarrinhoStr = "Add to cart"
+
+                }
+            }
+
+            holder.update(data[position].pname, data[position].category, data[position].pname, data[position].noCarrinhoStr)
 
 
         }
@@ -206,6 +231,16 @@ class ProductsActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    fun onCarrinho(item: MenuItem) {
+
+        var intent = Intent(this, CarrinhoActivity::class.java)
+
+        startActivity(intent)
+
+    }
+
+
 }
 
 
