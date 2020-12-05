@@ -1,15 +1,13 @@
 package pt.isec.amov.tp_amov
 
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
+import java.io.*
 import kotlin.math.min
 
 class Utils {
@@ -54,6 +52,20 @@ class Utils {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }
+
+        fun BitmapToImage(image:ByteArray, view: ImageView){
+            val bitmap = BitmapFactory.decodeByteArray(image,0,image.size)
+            view.setImageBitmap(Bitmap.createScaledBitmap(bitmap,128,128,false))
+        }
+
+        fun imageTobitmap(image:ImageView): ByteArray {
+            val bitmap = (image.drawable as BitmapDrawable).bitmap
+            val sout = ByteArrayOutputStream()
+
+            bitmap.compress(Bitmap.CompressFormat.PNG,90,sout)
+
+            return sout.toByteArray()
         }
 
     }

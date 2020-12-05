@@ -4,10 +4,11 @@ package pt.isec.amov.tp_amov.Dados
 import android.content.Intent
 
 class Produtos {
-    var data = arrayListOf<DadosProduto>()
+    var dataP = arrayListOf<DadosProduto>()
     lateinit var nome : String
     lateinit var intent : Intent
     var id:Int = 0
+    var cart = arrayListOf<DadosProduto>()
 
     constructor(nome: String, intent: Intent) {
         this.nome = nome
@@ -23,6 +24,17 @@ class Produtos {
     }
 
 
+    fun AddToCart(product: DadosProduto){
+        if(cart.contains(product)){
+            for(p in cart){
+                if(p.id == product.id)
+                    p.qty += product.qty
+            }
+        }else{
+            cart.add(product)
+        }
+    }
+
 
 
     private var showDelete : Boolean = false
@@ -36,7 +48,7 @@ class Produtos {
     fun setDelete(bool:Boolean){this.showDelete = bool}
 
     fun getProductById(id:Int) : DadosProduto? {
-        for (p in data){
+        for (p in dataP){
             if(p.id == id)
                 return p
         }
@@ -48,7 +60,7 @@ class Produtos {
 
     fun search(name:String): ArrayList<DadosProduto> {
         searchedData.clear()
-        for(product in data){
+        for(product in dataP){
             if(product.pname.contains(name))
                 searchedData.add(product)
         }
@@ -57,35 +69,35 @@ class Produtos {
 
 
     fun addProduct(product : DadosProduto){
-        data.add(product)
+        dataP.add(product)
     }
 
     fun removeProduct(product : DadosProduto): Boolean {
-        return data.remove(product)
+        return dataP.remove(product)
     }
 
 
 
     fun removeSelectedProducts(){
-        for(product in data)
+        for(product in dataP)
             if(product.selectedToDelete)
-                data.remove(product)
+                dataP.remove(product)
     }
 
     fun sortByCategory(){
-        data.sortBy { it.category }
+        dataP.sortBy { it.category }
     }
 
     fun sortByQty(){
-        data.sortBy { it.qty }
+        dataP.sortBy { it.qty }
     }
 
     fun sortByName(){
-        data.sortBy { it.pname.toUpperCase() }
+        dataP.sortBy { it.pname.toUpperCase() }
     }
 
     fun sortByImportance(){
-        data.sortBy { it.lvlImportance }
+        dataP.sortBy { it.lvlImportance }
 
     }
 

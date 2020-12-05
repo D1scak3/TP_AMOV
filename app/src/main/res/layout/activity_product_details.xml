@@ -13,17 +13,19 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <ImageView
-            android:layout_gravity="center"
-            android:padding="5dp"
-            android:outlineAmbientShadowColor="@color/black"
             android:id="@+id/img_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:onClick="onGaleryImg"
-            android:src="@drawable/img_566093"/>
+            android:onClick="chooseImg"
+            android:outlineAmbientShadowColor="@color/black"
+            android:padding="5dp"
+            android:src="@drawable/img_566093" />
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_weight="2"
@@ -36,11 +38,17 @@
                 android:layout_weight="1"
                 android:hint="Name of the product"
                 android:maxLines="1"/>
-            <EditText
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Category:"/>
+            <Spinner
+                android:id="@+id/spinnerCategory"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:hint="Category (ex.: cleaning)"/>
+                android:spinnerMode="dropdown"
+                />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -54,26 +62,25 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="Quantaty"
+                    android:hint="Quantity"
                     android:inputType="number"
                     />
-                <TextView
-
-                    android:id="@+id/tv1"
-
+                <Spinner
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="teste"
-                    android:gravity="center"
-                    />
+                    android:hint="Type"
+                    android:spinnerMode="dropdown"/>
 
             </LinearLayout>
         </LinearLayout>
 
 
     </LinearLayout>
-
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Price"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -82,7 +89,7 @@
         <EditText
             android:padding="5dp"
             android:hint="Take some notes..."
-
+            android:id="@+id/notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
@@ -101,8 +108,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginHorizontal="5dp"
-            android:text="Cancel"/>
+            android:text="Cancel"
+            android:onClick="onCancel"/>
         <Button
+            android:onClick="onSave"
             android:id="@+id/save_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

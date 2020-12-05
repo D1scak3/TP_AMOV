@@ -1,11 +1,11 @@
+
 package pt.isec.amov.tp_amov
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_list_dialog.view.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_products.*
 import pt.isec.amov.tp_amov.Dados.DadosLista
 import pt.isec.amov.tp_amov.Dados.Produtos
 
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
             holder.itemView.setOnClickListener{
                 var context = holder.itemView.context
-                data[position].intent.putExtra("idList", data[position].id)
+                //data[position].intent.putExtra("idList", data[position].id)
                 DadosLista.lastList = data[position].id
                 context.startActivity(data[position].intent)
             }
@@ -94,6 +95,43 @@ class MainActivity : AppCompatActivity() {
             return data.size
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.lists_menu, menu)
+
+
+        val actionSearch = menu!!.findItem(R.id.search)
+        val searchViewEditText = actionSearch.actionView as SearchView
+
+        searchViewEditText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                var s = DadosLista.getListById(ProductsActivity.id)?.search(query)
+                if (s?.isNotEmpty()!!)
+                    rvList.adapter = ProductsActivity.MyRVAdapter(s)
+                else{
+                    Toast.makeText(this@MainActivity, "That product doesnt exists", Toast.LENGTH_LONG).show()
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                rvList.adapter = MainActivity.MyRVAdapter(DadosLista.data)
+                return false
+            }
+        })
+
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.sort_name) {
+            DadosLista.getListById(ProductsActivity.id)?.sortByName()
+            rvList.adapter = ProductsActivity.MyRVAdapter(DadosLista.getListById(ProductsActivity.id)?.dataP!!)
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
