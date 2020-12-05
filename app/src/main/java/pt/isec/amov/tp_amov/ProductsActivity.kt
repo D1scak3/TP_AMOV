@@ -37,7 +37,7 @@ class ProductsActivity : AppCompatActivity() {
         id = DadosLista.lastList
         println(id)
         rvList.layoutManager = LinearLayoutManager(this@ProductsActivity, LinearLayoutManager.VERTICAL, false)
-        rvList.adapter = MyRVAdapter(DadosLista.getListById(id)?.data!!)
+        rvList.adapter = MyRVAdapter(DadosLista.getListById(DadosLista.lastList)?.data!!)
 
     }
 
@@ -171,13 +171,13 @@ class ProductsActivity : AppCompatActivity() {
 
             holder.itemView.addToCartBtn.setOnClickListener{
                 var product = DadosLista.getListById(DadosLista.lastList)!!.getProductById(data[position].id)
-                if(!product!!.noCarrinho) {
+                if(!product!!.noCarrinho) {//adiciona ao carrinho
                     DadosLista.getListById(DadosLista.lastList)!!.carrinho.add(product)
                     product.noCarrinho = true
                     holder.itemView.addToCartBtn.setText("Remove from cart")
                     product.noCarrinhoStr = "Remove from cart"
 
-                }else{
+                }else{//remove do carrinho
                     DadosLista.getListById(DadosLista.lastList)!!.carrinho.remove(product)
                     product.noCarrinho = false
                     holder.itemView.addToCartBtn.setText("Add to cart")

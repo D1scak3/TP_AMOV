@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_carrinho.*
 import kotlinx.android.synthetic.main.activity_products.*
 import kotlinx.android.synthetic.main.activity_products.rvList
+import kotlinx.android.synthetic.main.product_list_item.view.*
 import pt.isec.amov.tp_amov.Dados.DadosLista
 import pt.isec.amov.tp_amov.Dados.DadosLista.intent
 import pt.isec.amov.tp_amov.Dados.DadosProduto
@@ -29,11 +30,6 @@ class CarrinhoActivity : AppCompatActivity() {
 
         rvCarrinho.layoutManager = LinearLayoutManager(this@CarrinhoActivity, LinearLayoutManager.VERTICAL, false)
 
-        var carrinho = DadosLista.getListById(DadosLista.lastList)!!.carrinho
-
-        for(product in carrinho)
-            println(product.getName())
-
         rvCarrinho.adapter = MyRVAdapter(DadosLista.getListById(DadosLista.lastList)!!.carrinho)
 
     }
@@ -46,11 +42,13 @@ class CarrinhoActivity : AppCompatActivity() {
             var tv1 : TextView = view.findViewById(R.id.name)
             var tv2 : TextView = view.findViewById(R.id.name2)
             var tv3 : TextView = view.findViewById(R.id.name3)
+            var btn : Button = view.findViewById(R.id.addToCartBtn)
 
-            fun update(str1: String, str2: String, str3: String) {
+            fun update(str1: String, str2: String, str3: String, btnStr : String) {
                 tv1.text = str1
                 tv2.text = str2
                 tv3.text = str3
+                btn.text = btnStr
             }
         }
 
@@ -63,7 +61,16 @@ class CarrinhoActivity : AppCompatActivity() {
 
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.update(data[position].pname, data[position].category, data[position].pname)
+            var product = DadosLista.getListById(DadosLista.lastList)!!.getProductById(data[position].id)
+            holder.itemView.addToCartBtn.setOnClickListener{
+                holder.itemView.addToCartBtn.text = "Add to cart"
+                data[position].noCarrinho = false
+                data[position].noCarrinhoStr = "Add to cart"
+                DadosLista.getListById(DadosLista.lastList)!!.carrinho.remove(product)
+                this.notifyItemRemoved(position)
+            }
+
+            holder.update(data[position].pname, data[position].category, data[position].pname, data[position].noCarrinhoStr)
         }
 
         override fun getItemCount(): Int = data.size
